@@ -27,3 +27,10 @@ node index.js
 ```bash
 node index.js
 ```
+
+
+## 查看漫画
+
+由于下载下来都是连续的图片，我没有找到很好的阅读软件，所以开了一个坑，目前基本能用。
+
+https://github.com/Qquanwei/electron-webtoon
