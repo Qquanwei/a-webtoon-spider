@@ -70,13 +70,17 @@ const start_child_work = async (manhuaindexbegin, manhuaindexend) => {
                                         return imgs;
                                 });
                         } catch(e)  {
-                                i -= 1;
-                                console.log('page load error, repeat');
+                            i -= 1;
+                            console.log('page load error, repeat');
+                            try {
+
                                 await page.reload({ waitUntil: 'domcontentloaded'})
-                                await new Promise(resolve => {
-                                        setTimeout(resolve, 1000);
-                                });
-                                continue;
+                            }catch(e) {
+                            }
+                            await new Promise(resolve => {
+                                setTimeout(resolve, 1000);
+                            });
+                            continue;
                         }
 
                         title = title.replace(/[/\\?%*:|"<>]/g, '-');
@@ -104,13 +108,17 @@ const start_child_work = async (manhuaindexbegin, manhuaindexend) => {
                                         })
                                 });
                         } catch(e) {
-                                console.log('download error: ', e);
-                                i -= 1;
+                            console.log('download error: ', e);
+                            i -= 1;
+                            try {
+
                                 await page.reload({ waitUntil: 'domcontentloaded'})
-                                await new Promise(resolve => {
-                                        setTimeout(resolve, 1000);
-                                });
-                                continue;
+                            }catch(e) {
+                            }
+                            await new Promise(resolve => {
+                                setTimeout(resolve, 1000);
+                            });
+                            continue;
                         }
                         console.log('complete: ', title);
                 }
@@ -125,7 +133,7 @@ emitter.on('child-exit', () => {
         while ((current_childs < concurrent_count) && (currentmanhuaindex < manhuaindex_end)) {
                 console.log('启动新进程');
                 // 每个漫画任务完成 0-10个任务
-                startChlid(currentmanhuaindex, Math.max(currentmanhuaindex + 5), manhuaindex_end);
+                startChlid(currentmanhuaindex, Math.min(currentmanhuaindex + 5, manhuaindex_end));
                 currentmanhuaindex += 5;
         }
 });
